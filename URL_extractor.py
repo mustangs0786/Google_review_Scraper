@@ -29,20 +29,29 @@ searchPlace.send_keys('Verizon Store in New York')
 driver.find_element(By.XPATH, '/html/body/div[3]/div[9]/div[3]/div[1]/div[1]/div[1]/div[2]/div[1]/button').click()
 links = []
 for i in range(3):
-    try:
-        time.sleep(8)
+    # try:
+        time.sleep(3)
+        count = 22
+        while count > 1:
+            try:
+                scrollable_div = driver.find_element(By.XPATH,'/html/body/div[3]/div[9]/div[8]/div/div[1]/div/div/div[2]/div[1]')
+                driver.execute_script('arguments[0].scrollTop = arguments[0].scrollHeight', scrollable_div)
+                count = count -1
+                time.sleep(1)
+            except Exception:
+                count = 0
         source_code=driver.page_source
         time.sleep(1)    
         soup = BeautifulSoup(source_code,'lxml')
-        result =soup.find_all('div',class_='V0h1Ob-haAclf tH5CWc THOPZb')
+        result =soup.find_all('div',class_='Nv2PK tH5CWc THOPZb')
         for i in result:
-            comment = i.find('a', class_='a4gq8e-aVTXAb-haAclf-jRmmHf-hSRGPd')
+            comment = i.find('a', class_='hfpxzc')
             comment = comment.get('href')
             links.append(comment)
         print(len(links))
         driver.find_element(By.XPATH, '/html/body/div[3]/div[9]/div[8]/div/div[1]/div/div/div[2]/div[2]/div/div[1]/div/button[2]').click()
-    except Exception:
-        break
+    # except Exception:
+    #     break
 
 verizon_store_url = pd.DataFrame()
 verizon_store_url['url'] = links
